@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Tracker</title>
+</head>
+<body>
+    <h1>Party List</h1>
+    <ul id="party-list"></ul>
+
+    <h2>Add a Party</h2>
+    <form onsubmit="addParty(event)">
+        <input id="name" placeholder="Party Name" required>
+        <input id="date" type="date" required>
+        <input id="time" type="time" required>
+        <input id="location" placeholder="Location" required>
+        <input id="description" placeholder="Description" required>
+        <button type="submit">Add Party</button>
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
