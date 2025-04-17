@@ -1,85 +1,77 @@
-// ✅ Replace with your actual cohort name!
-const apiUrl = 'https://fsa-crud-2aa9294fe819.herokuapp.com/api/your-cohort-name/parties';
+// Stores the api url
+const apiUrl = 'https://fsa-crud-2aa9294fe819.herokuapp.com/api/2411-FTB-ET-WEB-PT/events';
 
-// This will hold our current list of parties so we can keep track of and render them.
-let partyState = [];
+// Stores the current list of events
+let eventState = [];
 
-// When the page loads, fetch the party data from the API
-document.addEventListener('DOMContentLoaded', fetchParties);
+// Fetch the event data from the API after the page loads
+document.addEventListener('DOMContentLoaded', fetchEvents);
 
-// Fetch the list of parties from the API and update the state
-async function fetchParties() {
+// Fetch the list of events from the API and update the state
+async function fetchEvents() {
   try {
-    const response = await fetch(apiUrl); // GET request to fetch parties
+    const response = await fetch(apiUrl); // GET request to fetch events
     const json = await response.json();   // Parse the JSON response
-    partyState = json.data;               // Store the party list in state
-    renderParties();                      // Render the list of parties in the DOM
+    eventState = json.data;               // Store the events in state
+    renderEvents();                       // Render the list of events in the DOM
   } catch (error) {
-    console.error("Error fetching parties:", error); // Error handling
+    console.error("Error fetching events:", error); // Error handling
   }
 }
 
-// Renders all parties from state to the page
-function renderParties() {
-  const partyList = document.getElementById('party-list');
-  partyList.innerHTML = ''; // Clear the current list before re-rendering
+// Renders all events from state to the page
+function renderEvents() {
+  const eventList = document.getElementById('party-list');
+  eventList.innerHTML = ''; // Clear the current list before re-rendering
 
-  partyState.forEach(party => {
-    // Create an <li> for each party
-    const partyItem = document.createElement('li');
-    partyItem.innerHTML = `
-      <strong>${party.name}</strong> - ${party.date} at ${party.time}<br>
-      Location: ${party.location}<br>
-      ${party.description}<br>
-      <button onclick="deleteParty('${party.id}')">Delete</button>
+  eventState.forEach(event => {
+    const eventItem = document.createElement('li');
+    eventItem.innerHTML = `
+      <strong>${event.name}</strong> - ${new Date(event.date).toLocaleDateString()} at ${event.location}<br>
+      ${event.description}<br>
+      <button onclick="deleteEvent('${event.id}')">Delete</button>
     `;
-    partyList.appendChild(partyItem); // Add the item to the list in the DOM
+    eventList.appendChild(eventItem); // Add the item to the list in the DOM
   });
 }
 
-// Called when the "Add Party" form is submitted
-async function addParty(event) {
+// Called when the "Add Event" form is submitted
+async function addEvent(event) {
   event.preventDefault(); // Prevent the form from refreshing the page
 
-  // Get values from input fields
   const name = document.getElementById('name').value;
   const date = document.getElementById('date').value;
   const time = document.getElementById('time').value;
   const location = document.getElementById('location').value;
   const description = document.getElementById('description').value;
 
-  // Create a new party object
-  const newParty = { name, date, time, location, description };
+  const newEvent = { name, description, date: `${date}T${time}:00.000Z`, location };
 
   try {
-    // Send POST request to create the new party
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newParty)
+      body: JSON.stringify(newEvent)
     });
 
-    const result = await response.json();  // Get the new party back from the API
-    partyState.push(result.data);          // Add the new party to our state
-    renderParties();                       // Re-render the party list
+    const result = await response.json();  // Get the new event back from the API
+    eventState.push(result.data);          // Add the new event to our state
+    renderEvents();                       // Re-render the event list
     event.target.reset();                  // Clear the form fields
   } catch (error) {
-    console.error("Error adding party:", error);
+    console.error("Error adding event:", error);
   }
 }
 
-// Delete a party by ID and update state and DOM
-async function deleteParty(id) {
+// Delete an event by ID and update state and DOM
+async function deleteEvent(id) {
   try {
-    // Send DELETE request to remove the party
     await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
 
-    // Remove the deleted party from state
-    partyState = partyState.filter(party => party.id !== id);
+    eventState = eventState.filter(event => event.id !== id);
 
-    // Re-render the party list without the deleted one
-    renderParties();
+    renderEvents();
   } catch (error) {
-    console.error("Error deleting party:", error);
+    console.error("Error deleting event:", error);
   }
 }
