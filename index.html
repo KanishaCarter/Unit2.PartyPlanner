@@ -10,14 +10,34 @@
     <ul id="party-list"></ul>
 
     <h2>Add a Party</h2>
-    <form onsubmit="addEvent(event)">
-        <input id="name" name="name" placeholder="Party Name" required>
-        <input id="date" name="date" type="date" required>
-        <input id="time" name="time" type="time" required>
-        <input id="location" name="location" placeholder="Location" required>
-        <input id="description" name="description" placeholder="Description" required>
-        <button type="submit">Add Party</button>
-    </form>
+<form onsubmit="addEvent(event)">
+  <label>
+    Party Name:
+    <input id="name" name="name" placeholder="Party Name" required>
+  </label><br>
+
+  <label>
+    Date:
+    <input id="date" name="date" type="date" title="Select a date" required>
+  </label><br>
+
+  <label>
+    Time:
+    <input id="time" name="time" type="time" title="Select a time" required>
+  </label><br>
+
+  <label>
+    Location:
+    <input id="location" name="location" placeholder="Location" required>
+  </label><br>
+
+  <label>
+    Description:
+    <input id="description" name="description" placeholder="Description" required>
+  </label><br>
+
+  <button type="submit">Add Party</button>
+</form>
     
 
     <script src="index.js"></script>
